@@ -1,0 +1,170 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "getData response",
+    "description": "Data points from start to end, ordered by date_time, at most 500.",
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "description": "1 = successful, 0 = request failed"
+        },
+        "msg": {
+            "type": "string",
+            "description": "'ok' on success, otherwise why the request failed"
+        },
+        "req": {
+            "type": "string",
+            "const": "/getData",
+            "description": "Which method was requested"
+        },
+        "sqltime": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Seconds the SQL query took (time.time()); 0 if no query ran"
+        },
+        "start": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+        },
+        "end": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+        },
+        "num_results": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 500
+        },
+        "results": {
+            "type": "array",
+            "maxItems": 500,
+            "items": {
+                "type": "object",
+                "description": "One row of class_datapoints: every column except the binary geo_point.",
+                "properties": {
+                    "dpid": {
+                        "type": "integer"
+                    },
+                    "date_time": {
+                        "type": "string",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+                    },
+                    "hex": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "squawk": {
+                        "type": [
+                            "string",
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "fid": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "flight_num": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "lat": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "lon": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "gs": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "alt_gps": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "alt_baro": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "cat": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "track": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "nav_heading": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "dpid",
+                    "date_time",
+                    "fid",
+                    "flight_num",
+                    "lat",
+                    "lon",
+                    "gs"
+                ],
+                "additionalProperties": true
+            }
+        }
+    },
+    "required": [
+        "code",
+        "msg",
+        "req",
+        "sqltime"
+    ],
+    "if": {
+        "properties": {
+            "code": {
+                "const": 1
+            }
+        }
+    },
+    "then": {
+        "required": [
+            "start",
+            "end",
+            "num_results",
+            "results"
+        ]
+    }
+}

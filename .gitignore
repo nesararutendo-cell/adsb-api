@@ -1,0 +1,5 @@
+# database password lives here - never commit it
+config.yml
+__pycache__/
+*.pyc
+.venv/

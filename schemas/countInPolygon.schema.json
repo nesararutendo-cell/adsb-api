@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "countInPolygon response",
+    "description": "Number of data points inside the polygon.",
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "description": "1 = successful, 0 = request failed"
+        },
+        "msg": {
+            "type": "string",
+            "description": "'ok' on success, otherwise why the request failed"
+        },
+        "req": {
+            "type": "string",
+            "const": "/countInPolygon",
+            "description": "Which method was requested"
+        },
+        "sqltime": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Seconds the SQL query took (time.time()); 0 if no query ran"
+        },
+        "polygon": {
+            "type": "string",
+            "description": "The polygon as WKT, ring closed"
+        },
+        "count": {
+            "type": "integer",
+            "minimum": 0
+        }
+    },
+    "required": [
+        "code",
+        "msg",
+        "req",
+        "sqltime"
+    ],
+    "if": {
+        "properties": {
+            "code": {
+                "const": 1
+            }
+        }
+    },
+    "then": {
+        "required": [
+            "polygon",
+            "count"
+        ]
+    }
+}

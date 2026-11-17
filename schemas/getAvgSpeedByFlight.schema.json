@@ -1,0 +1,109 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "getAvgSpeedByFlight response",
+    "description": "Average ground speed per flight over the period (start/end optional), ordered by flight_num, at most 500.",
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "description": "1 = successful, 0 = request failed"
+        },
+        "msg": {
+            "type": "string",
+            "description": "'ok' on success, otherwise why the request failed"
+        },
+        "req": {
+            "type": "string",
+            "const": "/getAvgSpeedByFlight",
+            "description": "Which method was requested"
+        },
+        "sqltime": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Seconds the SQL query took (time.time()); 0 if no query ran"
+        },
+        "start": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+        },
+        "end": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+        },
+        "num_results": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 500
+        },
+        "results": {
+            "type": "array",
+            "maxItems": 500,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "fid": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "flight_num": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "avg_speed": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "description": "AVG(gs), ground speed in knots, 2 decimals"
+                    },
+                    "num_points": {
+                        "type": "integer",
+                        "minimum": 1
+                    }
+                },
+                "required": [
+                    "fid",
+                    "flight_num",
+                    "avg_speed",
+                    "num_points"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    "required": [
+        "code",
+        "msg",
+        "req",
+        "sqltime"
+    ],
+    "if": {
+        "properties": {
+            "code": {
+                "const": 1
+            }
+        }
+    },
+    "then": {
+        "required": [
+            "start",
+            "end",
+            "num_results",
+            "results"
+        ]
+    }
+}
